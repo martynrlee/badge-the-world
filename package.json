@@ -1,0 +1,22 @@
+{
+  "name": "badge-the-world",
+  "version": "0.1.0",
+  "description": "Badge the World.",
+  "main": "app/index.js",
+  "dependencies": {
+    "client-sessions": "0.3.1",
+    "connect-flash": "~0.1.1",
+    "express": "~3.4.0",
+    "nunjucks": "~0.1.10",
+    "optimist": "~0.6.0",
+    "underscore": "~1.4.4",
+    "node-redis": "~0.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/christensenep/badge-the-world.git"
+  },
+  "author": "Badge the World",
+  "license": "MPL 2.0",
+  "readmeFilename": "README.md"
+}
