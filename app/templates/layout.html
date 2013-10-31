@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8 />
+    <title>{% block title %} Badge the World {% endblock %}</title>
+    {% block head %}
+    <link rel="stylesheet" href="{{ static('css/core.css') }}">
+    {% endblock %}
+  </head>
+  <body>
+  {% block body %}
+  {% endblock %}
+  {% block scripts %}
+  <script src="{{ static('js/jquery.min.js') }}"></script>
+  {% endblock %}
+  </body>
+</html>
