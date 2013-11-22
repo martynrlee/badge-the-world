@@ -8,10 +8,32 @@
     {% endblock %}
   </head>
   <body>
-  {% block body %}
-  {% endblock %}
-  {% block scripts %}
-  <script src="{{ static('js/jquery.min.js') }}"></script>
-  {% endblock %}
+    {% block headerWrapper %}
+    <header id="header">
+      {% block header %}
+      {% endblock %}
+    </header>
+    {% endblock %}
+
+    {% block bodyWrapper %}
+    <div id="body">
+    {% block body %}
+
+    {% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block footerWrapper %}
+    <footer id="footer">
+      {% block footer %}
+      <a href="http://openbadges.org/"><img class="footerlogo" src="{{ static('images/logo.png') }}"></a>
+      <a href="http://www.digitalme.co.uk/"><img class="footerlogo" src="{{ static('images/digitalme.jpg') }}" height="100px"></a>
+      {% endblock %}
+    </footer>
+    {% endblock %}
+
+    {% block scripts %}
+    <script src="{{ static('js/jquery.min.js') }}"></script>
+    {% endblock %}
   </body>
 </html>
