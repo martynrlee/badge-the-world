@@ -37,6 +37,8 @@ app.use(staticRoot, express.static(staticDir));
 
 app.get('/', 'home', views.home);
 app.get('/pledge', 'pledge', views.pledge);
+app.get('/contact', 'contact', views.contact);
+app.get('/info', 'info', views.info);
 
 if (!module.parent) {
   var port = config('PORT', 3000);
