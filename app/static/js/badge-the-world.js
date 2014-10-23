@@ -1,9 +1,8 @@
 $(document).ready(function() {
   var map = L.mapbox.map('map', 'echristensen.map-77cfk1ql', { tileLayer: { noWrap: true} }).setView([10, 10], 3);
 
-  var spreadsheetUrl = "https://spreadsheets.google.com/feeds/cells/0Av2oW_ggQ8i-dFBOMk1Mc2NPT0l4SEVYeGxLSm9td2c/od6/public/basic?alt=json";
-  $.getJSON(spreadsheetUrl, function(resp) {
-    var data = parseData(resp);
+  var spreadsheetUrl = "/pledges"
+  $.getJSON(spreadsheetUrl, function(data) {
     for (var i = 0; i < data.length; i++) {
       addLocation(data[i]);
     }
