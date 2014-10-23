@@ -31,6 +31,8 @@ Deploys the Badge the World website to Github pages for staging review.
 
     gulp.task 'deploy_gh_pages', () ->
       return gulp.src [
+        path.join '.', 'config.json'
+        path.join '.', 'index.js'
         path.join '.', 'app', '**', '*'
       ], { push: true }
       .pipe ghDeploy cacheDir: 'deploy_cache'
