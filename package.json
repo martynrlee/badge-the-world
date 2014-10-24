@@ -1,22 +1,41 @@
 {
   "name": "badge-the-world",
   "version": "0.1.0",
-  "description": "Badge the World.",
+  "description": "Badge the World splash page.",
   "main": "app/index.js",
-  "dependencies": {
-    "client-sessions": "0.3.1",
-    "connect-flash": "~0.1.1",
-    "express": "~3.4.0",
-    "nunjucks": "~0.1.10",
-    "optimist": "~0.6.0",
-    "underscore": "~1.4.4",
-    "node-redis": "~0.1.7"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm install"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/christensenep/badge-the-world.git"
+    "url": "https://github.com/mozilla/badge-the-world"
   },
+  "keywords": [
+    "mozilla",
+    "badges",
+    "openbadges"
+  ],
   "author": "Badge the World",
   "license": "MPL 2.0",
-  "readmeFilename": "README.md"
+  "bugs": {
+    "url": "https://github.com/mozilla/badge-the-world/issues"
+  },
+  "homepage": "https://github.com/mozilla/badge-the-world",
+  "dependencies": {
+    "client-sessions": "0.3.1",
+    "connect-flash": "~0.1.1",
+    "edit-google-spreadsheet": "^0.2.13",
+    "express": "~3.4.0",
+    "googleapis": "^1.0.19",
+    "node-redis": "~0.1.7",
+    "nunjucks": "~0.1.10",
+    "optimist": "~0.6.0",
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.8",
+    "gulp-gh-pages": "^0.4.0"
+  }
 }

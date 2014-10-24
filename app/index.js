@@ -6,6 +6,7 @@ const middleware = require('./middleware');
 const nunjucks = require('nunjucks');
 const path = require('path');
 const views = require('./views');
+const spreadsheet = require('edit-google-spreadsheet');
 
 const app = express();
 const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.join(__dirname, 'templates')), {autoescape: true});
@@ -37,6 +38,54 @@ app.use(staticRoot, express.static(staticDir));
 
 app.get('/', 'home', views.home);
 app.get('/pledge', 'pledge', views.pledge);
+app.get('/contact', 'contact', views.contact);
+app.get('/info', 'info', views.info);
+app.get('/pledges', function(req, res) {
+  spreadsheet.load(
+    {
+      debug: true,
+      spreadsheetId: config('SHEETID'),
+      worksheetId: config('WORKSHEETID'),
+      oauth: {
+        email: config('GEMAIL'),
+        keyFile: "btw.pem",
+        passphrase: 'notasecret'
+      }
+    },
+    function ready( err, sheet ) {
+      if (err) {
+        console.log(err);
+      }
+
+      sheet.receive( function(err, rows, info) {
+        if (err) {
+          console.log(err);
+        }
+
+        var data = []
+        var row = null;
+        
+        for (row in rows) {
+          if ( row != "1" ) {
+            d = {
+              "timestamp":rows[row]["1"],
+              "fiveways":rows[row]["2"],
+              "ideas":rows[row]["3"],
+              "numPeople":rows[row]["4"],
+              "location":rows[row]["5"]
+            }
+            data.push( d );
+          }
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.send(JSON.stringify(data));
+
+      });
+
+    }
+  );
+});
 
 if (!module.parent) {
   var port = config('PORT', 3000);

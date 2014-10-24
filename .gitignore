@@ -20,3 +20,5 @@ config.env
 config.json
 
 npm-debug.log
+deploy_cache
+*.pem
