@@ -1,94 +1,106 @@
 $(document).ready(function() {
-  var map = L.mapbox.map('map', 'echristensen.map-77cfk1ql', { tileLayer: { noWrap: true} }).setView([10, 10], 3);
+	var map = L.mapbox.map('map', 'echristensen.map-77cfk1ql', { tileLayer: { noWrap: false} }).setView([10, 10], 3);
 
-  var spreadsheetUrl = "/pledges"
-  $.getJSON(spreadsheetUrl, function(data) {
-    for (var i = 0; i < data.length; i++) {
-      addLocation(data[i]);
-    }
-  });
+	for (var i = 0; i < data.length; i++) {
+		addLocation(data[i]);
+	}
 
-  function addLocation(entry) {
-    var geocoder = L.mapbox.geocoder('echristensen.map-77cfk1ql');
-    var address = entry.location;
+	function addLocation(entry) {
+		var geocoder = L.mapbox.geocoder('echristensen.map-77cfk1ql');
+		var address = '';
+		if (entry.postcode != "") address += entry.postcode;
+		if ((entry.postcode != "") && (entry.location != "")) address += ', ';
+		if (entry.location != "") address += entry.location;
 
-    if (address) {
-      geocoder.query(address, function(err, result) {
-        if (err) {
-          return false;
-        }
+		console.log(address)
 
-        var description = entry.ideas + '<p>';
-        if (entry.numPeople) {
-          description += '<b>Number of people impacted:</b> ' + entry.numPeople + '<br>';
-        }
-        if (entry.timestamp) {
-          description += '<b>Date of pledge:</b> ' + entry.timestamp.split(' ')[0] + '<br>';
-        }
+		if (address) {
+			geocoder.query(address, function(err, result) {
+				if (err) {
+					console.log("false", entry)
+					return false;
+				}
 
-        L.mapbox.markerLayer({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [ result.latlng[1], result.latlng[0] ]
-          },
-          properties: {
-            title: entry.location,
-            description: description,
-            'marker-size': 'small',
-            'marker-color': '#f0a'
-          }
-        }).addTo(map);
-      });
-    }
+				var description = entry.idea + '<p>';
+				if (entry.numberOfPeople) {
+					description += '<b>Number of people impacted:</b> ' + entry.numberOfPeople + '<br>';
+				}
+				if (entry.created_at) {
+					description += '<b>Date of pledge:</b> ' + entry.created_at.split(' ')[0] + '<br>';
+				}
+
+				var marker = L.mapbox.markerLayer({
+					type: 'Feature',
+					geometry: {
+						type: 'Point',
+						coordinates: [ result.latlng[1], result.latlng[0] ]
+					},
+					properties: {
+						title: address,
+						description: description,
+						'marker-size': 'small',
+						'marker-color': '#f0a'
+					}
+				}).addTo(map);
+
+				if (entry._id == '54f829b643bbf5157bcf55e0') {
+
+					map.setView([result.latlng[0], result.latlng[1]], 5);
+
+					marker.eachLayer(function(m) {
+						m.openPopup();
+					});
+				}
+			});
+		}
 
 
-  }
+	}
 });
 
 function parseData(resp) {
-  var data = [];
-  var cells = resp.feed.entry;
-  var currentRow = 0;
-  var currentRowData = {};
+	var data = [];
+	var cells = resp.feed.entry;
+	var currentRow = 0;
+	var currentRowData = {};
 
-  for (var i=0; i < cells.length ;i++) {
-    var currentCell = cells[i];
-    var cellTitle = currentCell.title.$t;
+	for (var i=0; i < cells.length ;i++) {
+		var currentCell = cells[i];
+		var cellTitle = currentCell.title.$t;
 
-    var firstNumIndex;
-    for (firstNumIndex = 0; firstNumIndex < cellTitle.length && isNaN(cellTitle[firstNumIndex]); firstNumIndex++) {}
+		var firstNumIndex;
+		for (firstNumIndex = 0; firstNumIndex < cellTitle.length && isNaN(cellTitle[firstNumIndex]); firstNumIndex++) {}
 
-    var cellCol = cellTitle.substring(0,firstNumIndex);
-    var cellRow = cellTitle.substring(firstNumIndex);
+		var cellCol = cellTitle.substring(0,firstNumIndex);
+		var cellRow = cellTitle.substring(firstNumIndex);
 
-    if (cellRow != currentRow) {
-      if (currentRowData.location) {
-        data.push(currentRowData);
-      }
-      currentRowData = {};
-      currentRow = cellRow;
-    }
+		if (cellRow != currentRow) {
+			if (currentRowData.location) {
+				data.push(currentRowData);
+			}
+			currentRowData = {};
+			currentRow = cellRow;
+		}
 
-    switch (cellCol) {
-      case 'A':
-        currentRowData.timestamp = currentCell.content.$t;
-        break;
-      case 'B':
-        currentRowData.fiveways = currentCell.content.$t;
-        break;
-      case 'C':
-        currentRowData.ideas = currentCell.content.$t;
-        break;
-      case 'D':
-        currentRowData.numPeople = currentCell.content.$t;
-        break;
-      case 'E':
-        currentRowData.location = currentCell.content.$t;
-        break;
-    }
-  }
+		switch (cellCol) {
+			case 'A':
+				currentRowData.created_at = currentCell.content.$t;
+				break;
+			case 'B':
+				currentRowData.createBadge = currentCell.content.$t;
+				break;
+			case 'C':
+				currentRowData.idea = currentCell.content.$t;
+				break;
+			case 'D':
+				currentRowData.numberOfPeople = currentCell.content.$t;
+				break;
+			case 'E':
+				currentRowData.location = currentCell.content.$t;
+				break;
+		}
+	}
 
-  data.shift();
-  return data;
+	data.shift();
+	return data;
 }

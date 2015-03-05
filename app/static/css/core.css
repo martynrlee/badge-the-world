@@ -171,3 +171,6 @@ h1 {
 .navigation li a:hover {
   color: #666 !important;
 }
+.required {
+  color: #c43b1d;
+}
