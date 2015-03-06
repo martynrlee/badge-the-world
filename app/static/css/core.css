@@ -174,3 +174,6 @@ h1 {
 .required {
   color: #c43b1d;
 }
+
+h2 {font-size: 1.2em;}
+ul li {list-style: none}
